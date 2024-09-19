@@ -12,11 +12,14 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v4
 
+      # creates login using github secretes
       - name: Log into docker hub
         run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
+      # build the docker image. Using '.' because working from root dir
       - name: Build docker image
-        run: docker build -t {{ secrets.DOCKER_HUB_USERNAME }}/devops-demo .
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/devops-demo .
 
+      # pushes to docker hub to build image
       - name: Publish docker image to docker hub
         run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/devops-demo:latest
